@@ -10,16 +10,17 @@
 delete(instrfindall);
 
 % Init and open the serial port
-s = serial('COM4', 'baudrate', 115200);
+s = serial('COM3', 'baudrate', 115200);
 fopen(s);
 
 
+y_max = 4095;
 
 points = 100; %number of points on the graph at all times
 data_period = 50; %data period in milliseconds 
 %x will be the time axis. The time between points is defined by
 %"data_period"
-x = linspace(0,points*data_period, points);
+x = linspace(-points*data_period,0, points);
 
 %y will hold the distance, for now all values will be 0 and will have the
 %size defined by "points"
@@ -32,16 +33,16 @@ close ALL
 % edit the graph later. You can use "plot" instead of "area", I just liked
 % the aspect better.
 subplot(2,1,1);
-lh1 = area(x,y);
+lh1 = area(x,y1);
 
 % set the x and y axis limits to [0, points*data_period] and [0, 255]
 % respectively
-axis([0,points*data_period,0,255]);
+axis([-points*data_period, 0, 0, y_max]);
 
 %Do the same for the second sub plot
 subplot(2,1,2);
 lh2 = area(x,y2);
-axis([-points*data_period,0,0,1023]);
+axis([-points*data_period, 0, 0, y_max]);
 
 shg; %brings the figure to the front of all other windows
 
@@ -68,10 +69,8 @@ while ( strcmp(key, 's') == 0) %this while will stop if you press the "s" key
     high = fread(s,1);
     y2(points-1) = bitsll(high, 8) + low;
     
-    %save the value in distance without a ";" so we can read the number in
-    %console
-    distance = y(points)
- 
+    %save the value in a variable without a ";" so we can read the number in
+    %console 
     value1 = y1(points-1)
     value2 = y2(points-1)
     
