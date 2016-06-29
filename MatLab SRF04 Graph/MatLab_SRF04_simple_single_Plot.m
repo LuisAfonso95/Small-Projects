@@ -19,7 +19,7 @@ points = 100; %number of points on the graph at all times
 data_period = 50; %data period in milliseconds 
 %x will be the time axis. The time between points is defined by
 %"data_period"
-x = linspace(0,points*data_period, points);
+x = linspace(-points*data_period, 0, points);
 
 %y will hold the distance, for now all values will be 0 and will have the
 %size defined by "points"
