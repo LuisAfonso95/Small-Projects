@@ -47,7 +47,8 @@ axis([-points*data_period, 0, 0, y_max]);
 shg; %brings the figure to the front of all other windows
 
 key = get(gcf,'CurrentKey'); %get the key currently pressed
-while ( strcmp(key, 's') == 0) %this while will stop if you press the "s" key
+button_pressed = 0;
+while ( strcmp(key, 's') == 0 && button_pressed == 0) %this while will stop if you press the "s" key
     key = get(gcf,'CurrentKey'); %get the key currently pressed
     
     %block until there's at least 1 byte available to read
@@ -68,6 +69,8 @@ while ( strcmp(key, 's') == 0) %this while will stop if you press the "s" key
     low = fread(s,1);
     high = fread(s,1);
     y2(points-1) = bitsll(high, 8) + low;
+    
+    button_pressed = fread(s,1);
     
     %save the value in a variable without a ";" so we can read the number in
     %console 
