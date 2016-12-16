@@ -10,11 +10,11 @@
 delete(instrfindall);
 
 % Init and open the serial port
-s = serial('COM3', 'baudrate', 115200);
+s = serial('COM21', 'baudrate', 9600);
 fopen(s);
 
-
-y_max = 4095;
+%set the maximum for the values (in this case I used a 12bit ADC, so 4095)
+y_max = 65535;
 
 points = 100; %number of points on the graph at all times
 data_period = 50; %data period in milliseconds 
@@ -47,12 +47,14 @@ axis([-points*data_period, 0, 0, y_max]);
 shg; %brings the figure to the front of all other windows
 
 key = get(gcf,'CurrentKey'); %get the key currently pressed
-button_pressed = 0;
-while ( strcmp(key, 's') == 0 && button_pressed == 0) %this while will stop if you press the "s" key
+button_pressed = 0; %initialize variable at 0
+%this while will stop if you press the "s" key or press the button on the
+%board
+while ( strcmp(key, 's') == 0 ) 
     key = get(gcf,'CurrentKey'); %get the key currently pressed
     
     %block until there's at least 1 byte available to read
-    while s.BytesAvailable < 4 
+    while s.BytesAvailable < 2 
     end
     
     %push the all the values to the left of the graph 
@@ -66,11 +68,12 @@ while ( strcmp(key, 's') == 0 && button_pressed == 0) %this while will stop if y
     high = fread(s,1)
     y1(points-1) = bitsll(high, 8) +  low;
 
-    low = fread(s,1);
-    high = fread(s,1);
-    y2(points-1) = bitsll(high, 8) + low;
+    %low = fread(s,1);
+    %high = freinstrfindallad(s,1);
+    %y2(points-1) = bitslinstrfindalll(high, 8) + low;
     
-    button_pressed = fread(s,1);
+    %Get the button state
+    %button_pressed = fread(s,1);
     
     %save the value in a variable without a ";" so we can read the number in
     %console 
